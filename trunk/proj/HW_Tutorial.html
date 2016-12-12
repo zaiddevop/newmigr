@@ -1,0 +1,1449 @@
+<html>
+<head>
+<title>Building a Hardware Store Application</title></head>
+<body bgcolor="white" fgcolor="black">
+<font size="4">
+</font><hr>
+<center><font size="5">Tutorial: Java Hardware Store I</font></center>
+<br>
+
+          <br> <center> 
+          <img src="indexHWS_files/bludiv4684.html" width="600" height="5">
+
+           <p><font face="Verdana, Arial, Helvetica, sans-serif" size="1">
+
+<br> <br><font size="5">To visit my site</font> <br> <br>
+
+[<a href="http://sumtotalz.com/TotalAppsWorks/index.html">HOME</a>] 
+                 [<a href="http://sumtotalz.com/TotalAppsWorks/consulting.html">Consulting</a>] [<a href="http://sumtotalz.com/TotalAppsWorks/design.html">Design</a>]
+                 [<a href="http://sumtotalz.com/TotalAppsWorks/Maintenance.html">Maintenance</a>] [<a href="http://sumtotalz.com/TotalAppsWorks/project.html">Project</a>] 
+                 [<a href="http://sumtotalz.com/TotalAppsWorks/testing.html">Testing</a>] [<a href="http://sumtotalz.com/training.html">Training</a>] [<a href="http://sumtotalz.com/turnkey.html">Turnkey</a>] 
+                  [<a href="http://sumtotalz.com/TotalAppsWorks/java.html">Java</a>]</font></p>
+
+<br> <br><a href="http://sumtotalz.com/TotalAppsWorks/contact.html"><font size="4">To contact us</font></a>  <br><br>
+
+           <p><font color="black" size="2" face="Arial, Helvetica, sans-serif">© 2002 - 2005 All 
+                Rights Reserved<b><i> Total Application Works </i></b></font></p> </center> 
+
+<hr>
+<ul>
+<li><a href="#PROLOG">Prologue to an Update</a>  
+<li><a href="#INTRO">Introduction</a>  
+<li><a href="#AR"> Requirements for a Hardware Store Application</a>  
+<li><a href="#PABA"> Possible Approaches to Building an Application</a>  
+<li><a href="#DP"> Design Points </a>
+<li><a href="#DP1"> Design Point One: Scalability and Extensibility </a>
+<li><a href="#DP2"> Design Point Two: Adding a Menu </a>
+<li><a href="#DP3"> Design Point Three: Views </a>
+<li><a href="#DP4"> Design Point Four: Add, Update, and Delete </a>  
+<li><a href="#DP5"> Design Point Five:  Password Dialog</a> 
+<li><a href="#DP6"> Design Point Six: Using ActionListeners </a>
+<li><a href="#PIAT"> Putting It All Together </a>
+<li><a href="#HWSAPI">HardwareStore API </a>
+<li><a href="#HWSHLP">HardwareStore High-level psuedocode </a>
+<li><a href="#PWHLP">PassWord High-level psuedocode</a>
+<li><a href="#MCHHLP">MouseClickedHandler High-level psuedocode</a> 
+<li><a href="#URHLP">Update Record High-level psuedocode</a>
+<li><a href="#NRHLP">New Record High-level psuedocode</a> 
+<li><a href="#DRHLP">DeleteRec High-level psuedocode</a> 
+<li><a href="#RHLP">Record High-level psuedocode</a>
+</ul>
+<h3> <a name="PROLOG">Prologue to an Update</a>  </h3>
+<p>The wind was whistling by the windows and the air had a deep chill. I was comfortably inside, listening to some soothing music on a <i>oldies but goodies</i> station and reading a good book. The phone rang and the voice on the answering machine said, 'Pick up! Pick up Holmes!
+The hair on the back of my neck stood up and there was a cold sweat on the back of my neck. The voice sounded like the rattle from a diamondback snake. It was the voice of <i><b>Professor Moriarty</b></i>. Any one who stared into the eyes of a diamondback knows the feeling that I had. Venomous snakes
+should be left to the experts. The <b>TV channel <i>Animal Planet's</i> show <i>Venom ER</i></b> is always showing the people who mistakenly thought they could pick up and handle rattlesnakes. I am experienced in dealing with this type of snake, so I approached my phone with great care. <i><b>Professor Moriarty</b></i> is capable of anything. I picked up the phone and asked <i><b>Moriarty</b></i> what he wanted. The dialog went something like this:
+<dl>
+<dt><i><b>Professor Moriarty</b></i><dd>I read the tutorial <i><b>Building a Hardware Store Application</b></i>.
+<dt><i><b>Me</b></i><dd>So, what is your point?
+<dt><i><b>Professor Moriarty</b></i><dd>You wrote that the design should be extensible, and I don't see how this application is extensible.
+<dt><i><b>Me</b></i><dd>Your expertise is in crime. It is not in computer science. This application can be easily extended.
+<dt><i><b>Professor Moriarty</b></i><dd>Are you saying that I could extend it to a <b>J2EE</b> application?
+<dt><i><b>Me</b></i><dd>Yes, it could be extended to a <b>J2EE</b>. application and by letting those changes ripple through to the other two versions.
+<dt><i><b>Professor Moriarty</b></i><dd>I don't believe you.
+<dt><i><b>Me</b></i><dd>(I thought to myself, "I am being baited.' What is he up to? Let me make the changes and see if he bites. That way I can see what he is trying to cook up.)  I said, 'I'll make the changes and you can see how easy it is.
+<dt><i><b>Professor Moriarty</b></i><dd>Let me know when it is done. I'll call you... He hung up.
+<dt><i><b>Me</b></i><dd>I thought to myself, 'I know he is up to something nefarious. What can I do to find out? ...
+<dt><i><b>Dr. Yogi Watson</b></i><dd>Well Holmes. What changes do you have to make and why are you doing this?
+<dt><i><b>Me</b></i><dd>The changes needed to extend the application are:
+<ol>
+<li>Create a <b>.dat</b> file for each tool.
+<li>Create an initialization method to initialize each <b>.dat</b> file - <b>InitRecord()</b>.
+<li>Update the array used to display the tool grid directly from the <b>.dat</b> file each time the file is updated/changed - <b>toArray()</b>.
+<li>Create a method to refresh the display grid after each file update/change - <b>Redisplay()</b>.
+</ol>
+As to why I am doing this, if the spider thinks that the prey is in the web, it will attack. At the moment of attack, we can spring our trap.
+<dt><i><b>Dr. Yogi Watson</b></i><dd>Holmes, we have been through this many times before. It is like, 'Deja Vu in a loop.'
+<dt><i><b>Me</b></i><dd>You mean, 'All over again.'
+<dt><i><b>Dr. Yogi Watson</b></i><dd>No, I mean we have been through this so many times, it feels like an infinite loop.
+<dt><i><b>Me</b></i><dd>Then we must find the appropriate point to issue the <b>break</b> command.
+<dt><i><b>Dr. Yogi Watson</b></i><dd>Good thinking Holmes. Oncoming trains without <b>brakes</b> is not a pleasant thought,
+<dt><i><b>Me</b></i><dd>Now Dr. Watson is making with the jokes! (I lightly pounded the desktop and made a false laugh.) Let's get started with the updates...
+
+</dl>
+
+</p>
+<h3> <a name="INTRO">Introduction </a> </h3>
+<p> This tutorial is intended for Java programmers with some experience coding in Java. My experience has been that those persons who have not taken at least one semester in Java really struggle with the concept presented in this tutorial.</p>
+<p>This tutorial shows how to build a <b>Java Hardware Store</b> application using <a href="#RA"><b>random-access</b></a> to process the data file. This exercise is similar to the one I teach to second semester college Java students.
+For Java programmers with one to two years of experience, this should an interesting exercise. I am
+a proponent of designing before coding, so you should expect to see quite a bit of <i>pseudocode</i> in this tutorial.
+</p>
+<p>This tutorial will take you through the steps of building a <b>hardware store inventory</b> application. Much of the 
+code and logic that we will develop is provided in today's database management systems. However, for those who are not
+familiar with some of the logic used in file I/O, this will provide some very basic insights relative to how a <a href="#DBMS">DBMS</a> works.
+</p>
+<p>When you look at the following program <a href="#REQ">requirements</a>, it
+is obvious that the program is all about the data, how it is viewed and how
+it is manipulated. So let's proceed with the requirements before I give up
+the ending. No mystery gives up the ending in the first paragraph. So get
+out your pipes, violins, and magnifying glasses, as we prepare to "sleuth
+out" the solution. The clues for this mystery are presented in the section
+titled, "Requirements for an Application." A famous "sleuther" used to say,
+"Dr. Watson, the game's afoot."</p>
+
+<h3><a name="AR">Requirements for a Hardware Store Application </a></h3>
+<p>You are the owner of a hardware store and you need to keep an up-to-date
+inventory of the tools in stock. Write a program that initializes a random-access file 
+<b>hardware.dat</b> to two hundred and fifty empty records. The program should allow you to:
+</p>
+<ol>
+<li>Write this program as an application.
+<li>The application should use a <i>menu bar</i> and <i>menu items</i> to show the various options.
+<li>Initialize the <i>hardware.dat</i> file to 250 empty records;
+<font color="blue">
+<ul>
+<li>Changed for the 10/07/2005 update
+<ul>
+<li>Initialize the following files to 250 empty records;
+<ul>
+<li>lawnmower.dat
+<li>lawnTractor.dat
+<li>handDrill.dat
+<li>drillPress.dat
+<li>circularSaw.dat
+<li>hammer.dat
+<li>tableSaw.dat
+<li>bandSaw.dat
+<li>sanders.dat
+<li>stapler.dat
+</ul>
+<li>Each type of tool should be stored in a separate file.
+</ul>
+</ul>
+</font>
+<li>Input the data concerning each tool;
+<li>Delete a tool that you no longer carry;
+<li>Update information on any tool that you carry;
+<li>List all of the tools in your inventory;
+<li>Present views for the various categories (e.g. lawn mowers) of tools that you carry.
+
+<li><The comments should be written in the style expected by <i>javadoc</i>.
+<ul>
+<li><i>javadoc</i> style comments begin with <b>/**</b> and end with <b>*/</b>.
+<li><font size="4">For example,
+<pre> <b> <font color="blue">
+/** This is what a javadoc style comment looks like. */
+</font> </b> </pre>
+</ul>
+</ol>
+<p></p>
+<h3><a name="PABA"> Possible Approaches to Building an Application </a></h3>
+<p>When we look at the requirements (clues), a few items jump out at us.
+<ol>
+<li><b>application</b> - a program with a <b>main()</b> method
+<li><b>views</b> - ways to present the data
+<li><b>inventory</b> - implies persistent data
+<ul>
+<li>Data that is stored (written) to a storage device
+<li>Data that is retrieved (read) from a storage device
+<li>Means to manipulate (create, update, delete) the data
+</ul>
+</ol>
+<p></p>
+<p><font size="4">Over the years, I have seen various approaches to building an application. I will use the following 
+simple approach. It combines a <i>top-down</i> and a <i>bottom-up</i> approach for getting to the solution.
+<b><a href="#TEM">Templates</b></a> allow us to solve this problem from a top down view. We will use a template for the application
+and one for the data.
+</font></p><pre><font size="4"> <b> <font color="blue"> <i>
+/** this is a template for an application */
+
+public MyApp extends JFrame {
+   class level variables
+
+   public MyApp() {
+      ...
+   }
+ 
+   public static void main( String args[] ) {
+      ...
+   }
+
+   private MyInner Classes() {
+      ...
+   }
+}
+<br> <br>
+and
+<br> <br>
+/** this is a template for a file I/O class */
+
+public MyRecord  {
+   class level variables
+
+
+   public ReadRec() {
+      ...
+   }
+
+   public WriteRec() {
+      ...
+   }
+
+   public getVar1() {
+      ...
+   }
+
+
+   public getVar2() {
+      ...
+   }
+
+   public getVar3() {
+      ...
+   }
+
+   public getVar_n() {
+      ...
+   }
+
+   public setVar1() {
+      ...
+   }
+
+   public setVar2() {
+      ...
+   }
+
+   public setVar3() {
+      ...
+   }
+
+   public setVar_n() {
+      ...
+   }
+
+
+}
+</i> </font> </b> </font></pre>
+<p></p>
+<p>There are several ways to design an application and a file I/O class. We will not explore those 
+approaches for this tutorial. Some approaches put much of the application code in the main method. I prefer to put the code in 
+the classes and keep the <b>main()</b> methods as simple as possible. This approach allows us to test classes as stand-alone classes
+and integrate them more easily into more complex applications. For instance, I would never create a <i>menu bar</i> in the main method.
+I would create the <i>menu bar</i> in the class constructor or in a method called from within the class constructor. For enterprise level applications,
+I prefer to create a <i>Menu</i> class that contains minimal capability and then use <a href="#INH"><b>inheritance</b></a> and <b>method overriding</b> to tailor the subclass to fit our needs.
+I'll leave it to the reader to modify the code to change the affected method to a class and then use inheritance. Some of the more advanced readers may want to consider using an
+<i>interface</i> instead of a class, when doing the modification.
+</p>
+<p>Before proceeding with the <i>top-down</i> approach, we will go to the <i>bottom-up</i> approach and design our data. Let's
+consider the following attributes to describe each tool:
+<ul>
+<li><b>record ID</b>
+<li><b>tool type</b> - e.g. hammer
+<li><font size="4"><b>brand name</b>
+<li><b>description</b>
+<li><b>part number</b>
+<li><b>quantity</b>
+<li><b>price</b>
+</ul> <br> <br>
+I cheated a little bit on the data requirements. In reality, the customer should be the one telling us what type of data he wants in to see in the <i><b>.dat</b></i> files. So, let's assume that he did provide the requirements. If the customer 
+does not know what he wants to see, you should propose a couple of layouts and  let him choose. You may want to take him on the Internet, so he can see what layouts other hardware stores are using. This will give him something on which to base his decision.
+Assume that the customer has chosen a layout and the template for a file I/O class looks like this.
+<pre> <b> <font color="blue"> <i>
+/** this is a template for a file I/O class */
+
+public MyRecord  {
+   private int recID;
+   private String  toolType;
+   private String  brandName;
+   private String  toolDesc;
+   private String  partNum;
+   private int     quantity;
+   private long    toolCost;
+
+   public ReadRec() {
+      ...
+   }
+
+   public WriteRec() {
+      ...
+   }
+
+   public getVar1() {
+      ...
+   }
+
+
+   public getVar2() {
+      ...
+   }
+
+   public getVar_n() {
+      ...
+   }
+
+   public setVar1() {
+      ...
+   }
+
+   public setVar2() {
+      ...
+   }
+
+   public setVar_n() {
+      ...
+   }
+
+
+}
+</i> </font> </b> </pre>
+<p></p>
+<p>The access method will be <i>random-access</i>, so we will <b>not</b>
+be building a relational data base system, which would be beyond the scope
+of this tutorial. The design point becomes, "Do we put all of  the tool types
+in one table or a table per tool type?" The next sections consider various
+design points. </p>
+<h3><a name="DP"> Design Points </a></h3>
+<p>When we use the word <b>template</b>, we should think of a <i>cookie cutter</i>. Using  a <i>cookie cutter</i>,
+I can repeatedly cut out cookies that  all have the same attributes of size
+and shape. With a programming template, you can repeatedly cut out similar
+style programs, classes, methods and/or algorithms. The key is that these 
+templates should be of high quality and have been successfully used in other
+projects. </p>
+<p>When we use the word <b>design</b>, we should think of an outline or several possible outlines. And when we think of the word <b>design point</b>, we should think of a feature or a requirement.
+Therefore, for the purposes of this tutorial, each requirement is a design point.
+Based on the above listed requirements, the <i>design points</i> for the hardware store are:
+<ol>
+<li>Write this program as an application.
+<li>The application should use a <i>menu bar</i> and <i>menu items</i> to show the various options.
+<li>Initialize the <i>hardware.dat</i> file to 250 empty records;
+<li>Input the data concerning each <i>new</i> tool;
+<li>Delete a tool that you no longer carry;
+<li>Update information on any tool that you carry;
+<li>List all of the tools in your inventory;
+<li>Present views for the various categories (e.g. lawn mowers) of tools that you carry.
+<li>The comments should be written in the style expected by <i>javadoc</i>.
+</ol>  <br> Each design point can have several
+viable implementations. The key is to design the best implementation that
+works for a particular design point. </font><p></p>
+<p><font size="4">As I look closer at the requirements, it is obvious that
+I cannot complete the task because the requirements are too vague. At this
+point, I go back to the customer for clarification. After one or more discussions,
+we come up with: 
+<ol>
+<li>Write this program as an application.
+<li>The application should use a <i>menu bar</i> and <i>menu items</i> to show the various options.
+<table border="7">
+<tbody><tr>
+<th>File</th>
+<th align="left">View</th>
+<th>Options</th>
+<th>Help</th>
+<th>About</th>
+</tr>
+<tr>
+<td valign="top"><pre>   Exit</pre></td>
+<td>
+<ul>
+<li>   Bench Power Tools 
+<li>lawnmower 
+<li>lawnTractor 
+<li>handDrill 
+<li>drillPress 
+<li>circularSaw 
+<li>hammer 
+<li>tableSaw 
+<li>bandSaw 
+<li>sanders 
+<li>stapler
+</ul>
+</td>
+<td valign=top>
+<ul>
+<li>List All
+<li>--------
+<li>Add
+<li>Update
+<li>--------
+<li>Delete
+</ul>
+</td>
+<td>
+<ul>
+<li>
+</li></ul>
+</td>
+<td valign="top">Index</td>
+</tr>
+</tbody>
+</table><p></p>
+<li>Input the data concerning each <i>new</i> tool;
+<li>Delete a tool that you no longer carry;
+<li>Update information on any tool that you carry;
+<li>List all of the tools in your inventory;
+<li>Present views for the various categories (e.g. lawn mowers) of tools that you carry.
+<li>The comments should be written in the style expected by <i>javadoc</i>.
+</ol> <br>
+
+<p>At this point, I would use the application template to prototype the GUI. Allowing the customer to see an example of what he is requesting will save time
+spent arguing over what he really wanted later on in the development cycle.
+</p>
+<h4><a name="DP1"> Design Point One: Scalability and Extensibility </a></h4>
+<p>In today's environment, many businesses start off as just
+a "brick-and-mortar" business (a business that has a physical location, as
+opposed to an virtual or online presence). The inference is that we may start
+off with a physical hardware store and later on, we may decide to create
+an online store to work in conjunction with the physical store. As we design this program, we should design a program that
+can "go from a scooter to a race car without growing warts." What this means
+is that if the design does not allow for the possibility of a greater workload
+and/or added functionality, we end up with a program that is usually error
+prone. </font></p><p><font size="4">Our program design should allow for scalability,
+which means an increase in volume. If you visit a "Ma and Pop" store, there
+is probably just one cash register/program accessing the data file. However,
+if you visit a home improvement store, you will note that there may be ten
+to twenty cash registers and/or displays, which all are capable of accessing
+the data. A hardware store is a hardware store, so our design should allow
+for the growth from one to twenty. </p>
+<p>Another point to consider: what happens when simultaneous
+accesses to the data are occurring? How does the programmer protect against
+data corruption? Data corruption occurs when the same data is being changed
+at the same time. The key, in this case, is the capability to read a file
+for <i>read-and-update</i>. The <i>read-and-update</i> function on a file
+is a <b>lock</b> that allows one requester at a time to access (write to) a file.
+Multiple simultaneous accesses implies <i>multi-threading</i> and perhaps a <b>client-server application</b>.
+</p>
+<p>Our application design should allow for extensibility and
+scalability so we can modify our program at some future date to make it a
+multi-threaded client-server application. For this tutorial, our application
+will be single-threaded and it will only have to accommodate one file access
+at a time. However, proper use of classes and objects will allow for easier 
+modifications to handle scalability issues in the future. <b><i><font color=blue>Clue: Classes consist of attributes (data) and behaviors (methods). 
+Don't try to embed multiple behaviors in a single method.</font> </i> </b>
+</p>
+
+
+<h4><font size="4"><a name="DP2"> Design Point Two: Adding a Menu </a></font></h4>
+<p><font size="4">Design Point: The application should use a <i>menu bar</i> and <i>menu items</i> to show the various options. </font></p>
+<p><font size="4">I like to add a call to a <i>setupMenu()</i> method from the <b>MyApp() constructor</b> and an <i>inner</i> class to handle the events resulting from the menu. The pseudocode for the 
+<i>setupMenu()</i> method is as follows:
+</font></p><pre><font size="4"> <b> <font color="blue"> <i>
+/** this is a template for an application */
+
+public MyApp extends JFrame {
+   class level variables
+
+   public MyApp() {
+      ...
+     /** Call the setupMenu() method to create the menubar 
+      *  Menu and menu items */
+
+      setupMenu() ;
+   }
+ 
+   public setupMenu() {
+       /** Create the menubar */
+      
+
+      /** Add the menubar to the frame */
+      
+
+      /** Create the File menu and add it to the menubar  */
+      
+      /** Create the Edit menu and add it to the menubar  */
+
+      /** Create the View menu and add it to the menubar  */
+
+      /** Create the Help menu and add it to the menubar  */
+
+      /** Create the About menu and add it to the menubar  */
+   }
+ 
+   public static void main( String args[] ) {
+      ...
+   }
+
+   private MyInner Classes() {
+      ...
+   }
+
+   class MenuHandler implements ActionListener {
+      public void actionPerformed( ActionEvent e )  {
+
+         
+      }
+   }
+}
+
+</i> </font> </b> </font></pre> <br> 
+<h4><font size="4"><a name="DP3"> Design Point Three: Views </a> </font> </h4>
+<p> <font size="4">Views are ways to see or present data. We could use a listbox to present the data. Listbox's are useable when we want to present <b>n</b> rows and <b>one</b> column. However, if we want to present 
+<b>n</b> rows and <b>m</b> columns, we should prefer using a <b>JTable</b>. With a <b>JTable</b>, we can build an application as complicated as a spreadsheet application, where we can edit each cell. Our application is not going to be as complicated as 
+a spreadsheet application. We want to restrict who can update the data; therefore, making all of the cells not-editable will help in making the data more secure.</p>
+<p>The <b>JTable</b> is a very powerful class. <b>JTable</b> has several constructors that you can use; however, there are two that we will consider for this tutorial. 
+<br> <pre><font size="4"> <b> <font color="blue">
+JTable(int numRows, int numColumns)
+          Constructs a JTable with numRows and numColumns 
+           of empty cells using the DefaultTableModel.
+
+JTable(Vector rowData, Vector columnNames)
+          Constructs a JTable to display the values in the 
+            Vector of Vectors, rowData, with column names, 
+             columnNames.
+</font> </b> </font></pre> <br> <br>
+Since one of the requirements indicates that the size of the data file will contain 250 entries, first glance 
+might lead one to believe that an array of type <i>int</i> will suffice. However, this may be a disinformation ploy perpetrated by <b><i>Professor Moriarity</i></b>.
+As we build this application, we must constantly consider scalability. If we use the <b>JTable(int numRows, int numColumns)</b>, every time the file entries exceeded the array capacity we would have to recompile. This would be necessary because arrays are fixed size. When the number of entries in the data file
+exceed the size of our array, we have to recompile to allocate more space to our array. Making a change to a small application and recompiling is not catastrophic; however, when are making small changes to an enterprise level application, the cost could be prohibitive. Think <b>Y2K</b>!
+</p>
+<p>The <b>JTable(Vector rowData, Vector columnNames)</b> shrinks and grows, which is not like the array that is fixed in size. This would appear to be the correct choice. At this point, let me throw you a curve ball. For our application, we will use the following constructor:
+<br> <pre> <b> <font  color="blue">
+JTable(Object[][] rowData, Object[] columnNames)
+          Constructs a JTable to display the values in the 
+           two dimensional array, rowData, with column names, 
+            columnNames.
+</font> </b> </pre> <br> 
+where the <b>Object[][] rowData</b> will be 
+<b><pre><font size="4" color="blue">
+String[][] rowData = new String[ 250 ] [ 7 ] ;
+</font> </pre> </b> <br> 
+<br> and our ReadRec() method will look something like:<br>
+<b><pre><font color="blue">
+ /** **********************************************************
+  * Read a record from the specified RandomAccessFile
+  * 1- Read the first integer
+  * 2- Read the second integer
+  * 3- Read characters one at a time until we reach a string of
+  *    ';;;'. This indicates that we have reached the end of the 
+  *    character string for this particular record.
+  * 4- Load the resulting string into a StringTokenizer object.
+  * 5- We are looking for 7 tokens, so if the token count is
+  *    greater than 4, we will tokenize the string.
+  * 6- The tokens are loaded into a string array and then into the 
+  *    class variables.
+  ********************************************************** */
+
+   public void ReadRec( RandomAccessFile file ) throws IOException
+   {
+      char f[] = new char[ 585 ], ch;
+      StringTokenizer tokens ;
+      String str = "", str2 = "" ;
+      StringBuffer buf1  = new StringBuffer("");
+      int ii = 0 , loopCtl = 585 , len = 0 ;
+      long remm = fileLen - filePos ;
+
+
+      recID    = file.readInt();
+
+      quantity = file.readInt();
+
+      /** Read characters until we get to ;;; */
+      while ( ii < loopCtl ) {
+         str = str + file.readChar() ;
+         len = str.length() ;
+
+         if ( ii > 4 ) {
+            str2 = str.substring( len-4 , len-1 ) ;
+            if ( str2.equals( ";;;" ) )
+                break ;
+         }
+
+         ii++ ;
+      }
+
+      
+      tokens = new StringTokenizer( str , ";;" ) ;
+
+
+      recordTokens = new String[ 7 ] ;
+
+
+      if ( tokens.countTokens() >= 4 )   {
+         ii = 2 ;
+         
+         /** Load the tokens into a string array. */
+         while( ii < 7  )  {
+            recordTokens[ ii ] = tokens.nextToken().toString() ;
+            ii++ ;
+         }
+
+
+         toolType  = new String( recordTokens[ 2 ] ) ;
+         brandName = new String( recordTokens[ 3 ] ) ;
+         partNum   = new String( recordTokens[ 4 ] ) ;
+         cost      = new String( recordTokens[ 5 ] ) ;
+         toolDesc  = new String( recordTokens[ 6 ] ) ;
+      }
+      else  {
+         sysPrint(  "ReadRec() 6: There are no records to read." );
+      }      //  end of if
+   }
+
+</font></pre></b> <br>
+where file is declared as <i>RandomAccessFile file;</i> We are using the <b>StringTokenizer</b> API in the above method. Specifically,
+<pre> <b> <font  color="blue">
+StringTokenizer(String str, String delim)
+          Constructs a string tokenizer for the specified string.
+          The string tokenizer class allows an application to break 
+            a string into tokens, using <i>delim</i> as the delimiter.
+            In this case, the delimeter is ';;'. The code snippet is
+
+StringTokenizer tokens = new StringTokenizer( str , ";;" ) ;
+</font> </b> </pre>
+<br><br>  The Object[] columnNames will be 
+<b><pre><font size="4" color="blue">
+
+String[] columnNames [] = {"RecordID", "ToolType", "BrandName", 
+                           "ToolDescription", "PartNumber", 
+                            "Quantity", "Price"} ;  
+</font></pre></b>
+</p>
+<p>How do we put it together? The code for constructing and filling a <b>JTable</b> will look something like this.
+<b><pre><font size="4" color="blue">
+/** ****************************************************************
+* pData contains the data to be loaded into the JTable. 
+* columnNames contains the column names for the table.
+* 1- Create a new JTable.
+* 2- Add a mouse listener to the table.
+* 3- Make the table cells editable.
+* 4- Add the table to the Frame's center using the Border Layout
+*    Manager. 
+* 5- Add a scrollpane to the table.
+*****************************************************************/
+table = new JTable( pData, columnNames );
+table.addMouseListener( new MouseClickedHandler( file, table , pData ) ) ;
+table.setEnabled( true );
+
+c.add( table , BorderLayout.CENTER) ;
+c.add( new JScrollPane ( table ) );
+</font></pre></b> <br> <br>
+The pData array is loaded using contiguous locations. <b>JTable</b> tends to provide unpredictable results if
+the pData array has empty rows.
+</p>
+<h4><a name="DP4"> Design Point Four: Add, Update, and Delete </a> </h4>
+<p>Design Points:
+<b><pre>  
+4 Input the data concerning each tool;
+5 Delete a tool that you no longer carry;
+6 Update information on any tool that you carry;
+</pre> </b> 
+<br>What vehicle can we use that will allow the user to <b><i>Add, Update,</i></b> or <b><i>Delete</i></b> items from the data file.
+We can use <b>JLabel</b>s and <b>JTextfield</b>s on a <b>JPanel</b>, <b>Dialog</b> or a <b>JTabbedPane</b>. Before we start pseudocoding our 
+approach, we need to consider whether we need to password protect access to our business data. Not password protecting the business data is comparable to
+leaving the cash register drawer open and loaded with money in front of the store; it is an invitation for a malicious situation. Business data should always have restricted access. With that in mind,
+we need to also use <b>JPasswordField</b>. The concept we will use is every time someone wants to add, update, or delete a hardware item a modal dialog will be displayed. If the user enters a valid <i>userID</i> and <i>password</i>,
+then the application will display a modal <b>Add</b>, <b>Update</b>, or a <b>Delete</b> dialog.
+</p>
+<h4><a name="DP5"> Design Point Five: Password Dialog </a>  </h4>
+<p>When we consider the <b>password dialog</b>, we should consider a two-column design. 
+The left column should contain the instructions for entering data, and the right column should contain
+the text entry fields <b>(JTextFields)</b>. In addition, we will add an <i>enter</i> and a <i>cancel</i> button to this dialog.  We will
+need to use layout managers to manage the columnar layout and the positioning of the buttons.
+</p>
+<p>A GridLayout manager is useful in managing columnar data. The constructor we will use looks like: 
+<b><pre> <font color=blue>
+A GridLayout(int rows, int cols)
+</font> </pre> </b> 
+The GridLayout manager creates a grid layout with the specified number of rows 
+and columns. Our password dialog might look like: <br> <br>
+<table border>
+<tr>
+<td><pre>           Password dialog            </pre></td>
+</tr>
+<table border>
+<tr>
+<td><pre>Enter your userID  </pre></td>
+<td><pre>                 </pre></td>
+</tr>
+<tr>
+<td><pre>Enter your password </pre></td>
+<td><pre>                 </pre></td>
+</tr>
+<tr>
+<center>
+<td align=center valign=middle><pre>Enter </pre></td>
+<td align=center valign=middle>Cancel   </pre></td>
+</center>
+</tr>
+
+</table>
+
+</table> 
+</p>
+<p>We will create two <b>JPanel</b>s, and on one (mainPanel) will add the JLables and JTextFields, using a GridLayout manager.
+On the other JPanel (buttonPanel), we will add the JButtons. Next we use the BordeLayout to add the mainPanel to the center of the dialog,
+and the BordeLayout to add the buttonPanel to the bottom of the dialog. The code looks something like:
+<b><pre> <font color=blue>
+class PassWord  extends Dialog
+         implements ActionListener {   
+
+   public PassWord(  ) {
+
+      super( new Frame(), "Password Check", true );      
+
+      enter = new JButton( "Enter" );
+      cancel = new JButton( "Cancel" );
+
+      buttonPanel = new JPanel() ;
+      mainPanel   = new JPanel() ;
+      mainPanel.setLayout( new GridLayout( 3, 2 ) );
+      add( mainPanel , BorderLayout.CENTER) ;
+
+      /** add the labels and text fields to the main panel */
+      mainPanel.add( userIDLabel );
+      mainPanel.add( userID );
+      mainPanel.add( passwordLabel );
+      mainPanel.add( password );
+
+      buttonPanel.add( enter ) ;
+      buttonPanel.add( cancel ) ;
+      add( buttonPanel , BorderLayout.SOUTH);
+
+      /** add the actionlisteners to the buttons */
+      enter.addActionListener( this );
+      cancel.addActionListener( this );
+
+      setSize( 400, 300 );
+
+   }
+
+Please note that this code is incomplete.
+</font> </pre> </b> 
+</p>
+<p>The logic used in the <b>Password</b> dialog is similar to the logic that we
+will use for the <b>Add, Update</b>, and <b>Delete</b> dialogs.
+</p>
+<h4><font size="4"><a name="DP6"> Design Point Six: Using ActionListeners </a> </font> </h4>
+<p><b>ActionListeners</b> allow the program to respond to user-initiated events. These events could be the
+pressing of a button, pressing a menu item, entering data in test field, etc. In such cases, the program
+is designed and coded to take some action. The primary purpose of GUI applications is to wait for some user initiated event.
+</p>
+<p>In the previous section, you will note the following code.
+<b><pre> <font color=blue>
+/** add the actionlisteners to the buttons */
+      enter.addActionListener( this );
+      cancel.addActionListener( this );
+</font> </pre> </b> <br> <br>
+The purpose of this code is indicate to the JVM that when the <b>enter</b> or <b>cancel</b> buttons are pressed, <i>this</i> class will respond to the event.
+The psuedocode for the ActionListener looks like:
+<b><pre> <font color=blue>
+class PassWord  extends Dialog
+         implements ActionListener {
+
+   code...
+
+   /**
+    * This method responds to the enter or cancel button
+    *  being pressed on the Password dialog.
+    */
+   public void actionPerformed( ActionEvent e )    {
+      if ( e.getSource() == enter ) {
+         response code
+      }
+      else {
+         respond to the cancel button being pressed
+      }
+   }
+
+   code...
+}
+</font> </pre> </b> <br> <br>
+<h3><a name="PIAT"> Putting It All Together</a> </h3>
+<p>Even though  have shown you some code, you should have not tried to do any coding yourself. You should be working only with pseudocode. Can you visulize what our project looks like?
+Structurally, it should look like:
+<center> <font size=6>
+Hardware Store Structure
+</font> </center>
+<pre> <b> <font color=blue>
++----------------------+          +-------------+     
+| Hardware Store Class | <-+----> |   Record    | 
+| +-----------------+  |   |      +-----+-------+    
+| |  Add  Class     |<-+---+            ^      
+| +-----------------+  |   |            |  
+| | Update  Class   |<-+---+            V
+| +-----------------+  |   |   +--------+------------+
+| | Delete Class    |<-+---+   |  Persistant Data    | 
+| +-----------------+  |       +---------------------+
++----------------------+ 
+</font> </b> </pre>
+The <b>Add</b>, <b>Update</b>, and the <b>Delete</b> classes are considered <a href="#INNER">inner classes</a>. <b>Inner classes</b> are classes that are defined inside another class. In the above case, the
+<b>Add</b>, <b>Update</b>, and the <b>Delete</b> classes are defined inside of the <b>HardwareStore</b> class.
+<h3><a name="HWSAPI">HardwareStore API </a> </h3>
+<p>The Hardware Store API looks like:
+<br> <br>
+<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>HardwareStore Method Summary</B></FONT></TD>
+</TR>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><b>actionPerformed </b></td>
+<td>This is the event handler that responds to the cancel button  on the main frame.
+</td>
+</tr>
+<tr BGCOLOR=lightyellow>
+<td><b>cleanup()</b></td>     
+<td>This is the cleanup method that is used to close the hardware.dat file and exit the application.</td>
+</tr>
+<tr>
+<td><b>display() </b>
+</td>
+<td>is used to display the contents of the specified table in the passed parameter.
+</td>
+</tr>
+<tr BGCOLOR=lightskyblue>
+<td><b>displayAddDialog()</b>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><b>displayDeleteDialog()</b></td>
+<td>
+</td>
+</tr>
+<tr BGCOLOR=lightyellow>
+<td><b>displayUpdateDialog() </b></td>
+<td>
+</td>
+</tr>
+<tr BGCOLOR=lightskyblue>
+<td><b>getEntries()</b></td>
+<td>returns the number of current entries in the pData array.</td>
+</tr>
+<tr>
+<td><b>getPData(int ii, int iii) </b></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><b>InitRecord(String fileDat, <br>String[][] FileRecord, <br>int loopCtl) </b></td>
+<td>is used to create and initialize the tables used by the Hardware Store application.
+</td>
+</tr>
+<tr>
+<td><b>main(String[] args)</b></td>
+<td>is the entry point that Java call on the start of this program.</td>
+</tr>
+<tr>
+<td><b>paintComponent(Graphics g) </b></td>
+<td>
+</td>
+</tr>
+<tr BGCOLOR=lightyellow>
+<td><b>Redisplay(RandomAccessFile file, <br>String[][] a)  </b></td>
+<td>is used to redisplay/repopulate the JTable on the main frame.</td>
+</tr>
+<tr>
+<td><b>setEntries(int ent)  </b> </td>
+<td>is called to set the number of current entries in the pData array. </td>
+</tr>
+<tr>
+<td><b>setup() </b> </td>
+<td>is used to 
+<ol>
+<li>Open the lawnmower.dat file 
+<li>Call the toArray() method to populate the JTable with the contents of the lawnmower.dat file.
+<li>Create any buttons that will be displayed on the main frame.
+</ol> </td>
+</tr>
+<tr BGCOLOR=lightyellow>
+<td><b>setupMenu()  </b> </td>
+<td>is used to create the 
+<ol>
+<li>Menu Bar 
+<li>Menu Items </ol> </td>
+</tr>
+<tr BGCOLOR=lightskyblue>
+<td><b>sysPrint(java.lang.String str) </b> </td>
+<td>is a debugging aid that is used to print information to the screen.
+</td>
+</tr>
+<tr>
+<td><b>toArray(RandomAccessFile file, <br>String[][] a) </b> </td>
+<td>Returns an array containing all of the elements in this list in the correct order. </td>
+</tr>
+</table> <br> <br>
+The high-level pseudocode can be found in the next section.
+</p>
+<h3><a name="HWSHLP">HardwareStore High-level psuedocode</a> </h3>
+<p>The Hardware Store high-level psuedocode looks like:
+<b><pre> <font color=blue>
+public class HardwareStore extends JFrame
+          implements ActionListener {
+
+   public HardwareStore()   {
+
+      setupMenu();
+      setup();
+   }
+
+   public void actionPerformed( ActionEvent e )
+   {
+      
+      cleanup();
+   }
+
+   public void cleanup() {
+      
+   }
+
+   public void displayDeleteDialog() {
+
+   }
+
+
+   public void displayUpdateDialog() {
+
+   }
+
+   public void displayAddDialog() {
+
+   }
+
+   public void setEntries( int ent )   {
+
+   }
+
+   public String getPData( int ii , int iii )   {
+
+   }
+
+   public int getEntries(  )   {
+
+   }
+
+   public static void main( String args[] )
+   {
+
+   }
+
+<a name="MHHLP">
+   class MenuHandler implements ActionListener {
+      public void actionPerformed( ActionEvent e )  {
+
+      }
+   }
+
+   
+   class WindowHandler extends WindowAdapter {
+      HardwareStore h;
+
+      public WindowHandler( HardwareStore s ) { h = s; }
+
+      public void windowClosing( WindowEvent e ) { h.cleanup(); }
+   }
+}
+</font> </pre>  </b>
+You will notice that there are some inner classes in the above pseudocode. The API for the
+Inner classes looks like:
+<br> <br><a name="INNER">
+<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Inner Classes API Summary</B></FONT></TD>
+</TR>
+<tr>
+<th>Class</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><a href="#DRHLP">DeleteRec</a></td>
+<td>is used to create the Delete Record dialog, which in turn, is used to delete records from the specified table(s).
+</tr>
+<tr>
+<td><a href="#MHHLP">MenuHandler </a></td>
+<td>The purpose of the MenuHandler class is to respond to the events 
+generated by the menu items. </td>
+</tr>
+<tr>
+<td><a href="#MCHHLP">MouseClickedHandler </a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#NRHLP">NewRec </a></td>
+<td>is used to gather and insert data for new hardware item records.</td>
+</tr>
+<tr>
+<td><a href="#PWHLP">PassWord </a></td>
+<td>The Password Dialog is intended to ensure only those with authorization are allowed to access the data
+files. </td>
+</tr>           
+<tr>
+<td><a href="#URHLP">UpdateRec </a></td>
+<td> The UpdateRec object is created when there is a need to update an 
+existing record.</td>
+</tr>           
+<tr>
+<td><a href="#DRHLP">WindowHandler </a></td>
+<td>The WindowHandler object is created when the application is 
+exiting/closing. </td>
+</tr>            
+</table>
+</p>
+<h3><a name="PWHLP">PassWord High-level psuedocode</a> </h3>
+<p> The class PassWord  API looks like:
+<br> <br>
+<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>PassWord Class Summary</B></FONT></TD>
+</TR>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>PassWord()</td>
+<td>this constructor is used to create the Password dialoog's 
+<ol>
+<li>Labels 
+<li>Text fields 
+<li>Buttons 
+<li>Panels</td>
+</ol>
+</tr>
+<tr>
+<td>actionPerformed()</td>
+<td>this method responds to the enter or cancel button being pressed on the Password dialog.</td>
+</tr>
+<tr>
+<td>displayDialog ()</td>
+<td> is used to display the dialog that checks the userID and password that allows the user to add, update, delete hardware items for the various tables.</td>
+</tr>
+</table>
+<pre> <b> <font color=blue>
+class PassWord  extends Dialog
+         implements ActionListener {
+  
+
+   public PassWord( HardwareStore hw_Store ) {
+      
+   }
+
+   public void displayDialog ( String which_Dialog ) {
+
+   }
+
+   
+   public void actionPerformed( ActionEvent e )    {
+
+   }
+
+   private void clear()    {
+
+   }
+
+}
+</font> </b> </pre> 
+</p>
+<h3><a name="MCHHLP">MouseClickedHandler High-level psuedocode</a> </h3>
+<p> The class MouseClickedHandler API looks like:
+<br> <br>
+<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>MouseClickedHandler Class Summary</B></FONT></TD>
+</TR>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</table>
+<pre> <b> <font color=blue>
+class MouseClickedHandler extends MouseAdapter {
+
+
+   MouseClickedHandler( RandomAccessFile fPassed , JTable tablePassed ,
+                    String p_Data[] []) {
+
+
+   }
+
+   public void mouseClicked( MouseEvent e )    {
+
+   }
+}
+
+</font> </b> </pre> 
+</p>
+<h3><a name="URHLP">UpdateRec High-level psuedocode</a> </h3>
+<p> The class UpdateRec API looks like:
+<br> <br>
+<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<b>Update Record Class Summary</b></FONT></TD>
+</TR>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><b>UpdateRec()</b></td>
+<td> is the constructor that is used to initialized/create the 
+<ol>
+<li>Labels
+<li>Textfields
+<li>buttons for this class.</ol></td>
+</tr>
+<tr>
+<td><b>actionPerformed(ActionEvent e)</b></td>
+<td>is the event handler that responds to the GUI events generated by the UpDate dialog. </td>
+</tr>
+<tr>
+<td><b>checkDigit(String strVal)</b></td>
+<td> is used to ensure that the data entered is a digit.</td>         
+</tr>
+<tr>
+<td><b>upDSetup()</b></td>
+<td> is used to create the labels, text fields, and buttons for the UpDate Dialog.</td> 
+</tr>
+</table>
+<pre> <b> <font color=blue>
+class UpdateRec extends Dialog
+         implements ActionListener {
+
+
+   public UpdateRec( RandomAccessFile f , String p_Data [] [], int iiPassed)
+   {
+
+   }
+
+   public void actionPerformed( ActionEvent e )
+   {
+
+   }
+
+   private void clear()
+   {
+
+   }
+}
+
+</font> </b> </pre> 
+</p>
+<h3><a name="NRHLP">NewRec High-level psuedocode</a> </h3>
+<p> The class NewRec API looks like:
+<br> <br>
+<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<b>New Record Class Summary</b></FONT></TD>
+</TR>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><b>NewRec(HardwareStore hw_store, <br>RandomAccessFile f, <br>JTable tab, <br>String[][] p_Data) </b></td>
+<td>is the constructor that is used to initialized/create the 
+<ol>
+<li>Labels
+<li>Textfields 
+<li>buttons for this class.</ol></td>
+</tr>
+<tr>
+<td><b>actionPerformed(ActionEvent e </b></td>
+<td>is the event handler that responds to the GUI events generated by the NewRecord dialog.</td>
+
+</tr>
+<tr>
+<td><b>newSetup() </b></td>
+<td>does the actual label, text field, button setup and declares the layout manager that is used.</td></td>
+</tr>
+</table>
+<pre> <b> <font color=blue>
+class NewRec extends Dialog
+        implements ActionListener {
+
+
+   public NewRec( HardwareStore hw_store, RandomAccessFile
+                     f, JTable tab,  String p_Data[] []  )
+   {
+
+   }
+
+   public void actionPerformed( ActionEvent e )
+   {
+      
+   }
+
+   private void clear()
+   {
+
+   }
+}
+
+</font> </b> </pre> 
+</p>
+<h3><a name="DRHLP">DeleteRec High-level psuedocode</a> 
+<p> The class DeleteRec API looks like:
+<br> <br>
+<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Delete Record Class Summary</B></FONT></TD>
+</TR>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>DeleteRec(HardwareStore hw_store, <br>RandomAccessFile f, <br>JTable tab, <br>String[][] p_Data)</td>
+<td>this constructor is used to initialize the DeleteRec class/dialog.</td>
+</tr>
+<tr>
+<td>actionPerformed(ActionEvent e)</td>
+<td>is used to respond to the event emanating from the Delete Record dialog</td>
+</tr>
+<tr>
+<td>delSetup()</td>
+<td>is used to create 1- Label Record text field 3- The Record ID button 4- The Cancel button</td>
+</tr>
+</table>
+<pre> <b> <font color=blue>
+class DeleteRec extends Dialog
+          implements ActionListener {
+
+
+   public DeleteRec( HardwareStore hw_store,  RandomAccessFile f,
+                   JTable tab, String p_Data[] []  )
+   {
+      
+   }
+
+   public void actionPerformed( ActionEvent e )   {
+      
+   }
+
+   private void clear()   {
+
+   }
+}
+
+and 
+
+</font> </b> </pre> 
+</p>
+<h3><a name="RHLP">Record High-level psuedocode</a> </h3>
+<p>The class Record API looks like:
+<br> <br>
+<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Record Method Summary</B></FONT></TD>
+</TR>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><b>fill(String str, <br>StringBuffer buf, <br>int len) </b> </td>
+<td> The fill() method is used to fill in the passed string with blanks.
+ </td>
+</tr>
+<tr bgcolor=lightyellow>
+<td><b> getBrandName() </b></td>
+<td> is used to obtain the value of the current value of Brand Name from the record.  </td>
+</tr>
+<tr>
+<td> <b> getCost() </b></td>
+<td> is used to obtain the value of the current value of cost from the record class variable cost. </td>
+</tr>
+<tr>
+<td><b> getPartNumber()  </b></td>
+<td>is used to obtain the Part Number value currently in the record class variable partNum.  </td>
+</tr>
+<tr bgcolor=lightskyblue>
+<td><b> getQuantity() </b></td>
+<td> is used to obtain the value of the quantity currently in the record class variable quantity. </td>
+</tr>
+<tr bgcolor=lightyellow>
+<td><b>getRecID() </b></td>
+<td> is used to obtain the value of the record ID currently in the record class variable recID. </td>
+</tr>
+<tr>
+<td><b> getSize()</b></td>
+<td> NOTE: This method contains a hard coded value for the size of a record of information. </td>
+</tr>
+<tr bgcolor=lightyellow>
+<td> <b> getToolDesc()</b></td>
+<td>is used to obtain the description of the tool currently in the record class variable toolDesc.</td>
+</tr>
+<tr>
+<td> <b> getToolType()</b></td>
+<td> is used to obtain the tool type currently in the record class variable toolType. </td>
+</tr>
+<tr bgcolor=lightskyblue>
+<td><b> ReadRec( RandomAccessFile file)</b></td>
+<td>ReadRec() Reads a record from the specified by the RandomAccessFile variable file.
+</td>
+</tr>
+<tr>
+<td><b> setBrandName(String f)</b></td>
+<td>is used to set the value of the brand name currently in the record class variable brandName.
+</td>
+</tr>
+<tr bgcolor=lightyellow>
+<td><b> setCost(String f) </b></td>
+<td>is used to set the value of the of the cost currently in the record class variable cost.
+</td>
+</tr>
+<tr>
+<td><b> setFileLen(long fl) </b> </td>
+<td> is used to set the current length of the file in the record class variable fileLen. </td>
+</tr>
+<tr bgcolor=lightskyblue>
+<td><b> setFilePos(long fp) </b> </td>
+<td> is used to set the current position of the cursor in the file. </td>
+</tr>
+<tr>
+<td><b> setPartNumber(String f) </b></td>
+<td>is used to set the part number in the record class variable partNum. </td>
+</tr>
+<tr bgcolor=lightyellow>
+<td> <b> setQuantity(int q)</b></td>
+<td>is used to set the value of the quantity in the record class variable quantity. </td>
+</tr>
+<tr>
+<td> <b> setRecID(int p) </b></td>
+<td>is used to set the value of the of the record ID in the record class variable recID.
+</td>
+</tr>
+<tr bgcolor=lightskyblue>
+<td><b> setToolDesc(String f)  </b></td>
+<td>is used to set the value of the tool description in the record class variable toolDesc. </td>
+</tr>
+<tr>
+<td><b> setToolType(String f)  </b></td>
+<td>is used to set the value of the current value of Tool Type from the record class variable toolType. </td>
+</tr>
+<tr bgcolor=lightyellow>
+<td><b> sysPrint(String str) </b></td>
+<td> is a debugging aid that is used to print information to the screen.
+</td>
+</tr>
+<tr>
+<td><b> write(RandomAccessFile file)  </b></td>
+<td> Writes a record to the specified RandomAccessFile object file. </td>
+</tr>
+<tr bgcolor=lightskyblue>
+<td><b> writeInteger(RandomAccessFile file,<br> int a) </b></td>
+<td> is used to write an integer to the randomaccess file.  </td>
+</tr>
+</table>
+<p>The class Record pseudocode looks like:
+<pre> <b> <font color=blue>
+
+public class Record  {
+ 
+   public void ReadRec( RandomAccessFile file ) throws IOException
+   {
+      
+   }
+
+   /**
+    *  The fill method is used to fill in the passed string with
+    *  blanks.
+    */
+    public StringBuffer fill ( String str, StringBuffer buf ) {
+
+   }
+
+   /**
+    *  Write a record to the specified RandomAccessFile
+    */
+   public void write( RandomAccessFile file ) throws IOException
+   {
+
+   }
+
+   public int getRecID() { return recID; }
+
+   public String getToolName() { return toolType.trim(); }
+
+   public String getToolDesc() { return toolDesc.trim(); }
+
+   public String getPartNumber() { return partNum.trim(); }
+
+   public int getQuantity() { return quantity; }
+
+   public String getBrandName() { return brandName.trim(); }
+
+   public String getCost() { return cost.trim(); }
+
+   public void setToolName( String f ) { toolType = f; }
+
+   public void setRecID( int p ) { recID = p; }
+
+   public void setCost( String f ) { cost = f; }
+
+   public void setBrandName( String f ) { brandName = f; }
+
+   public void setToolDesc( String f ) { toolDesc = f; }
+
+   public void setPartNumber( String f ) { partNum = f; }
+
+   public void setQuantity( int q ) { quantity = q; }
+
+   /** NOTE: This method contains a hard coded value for the
+    * size of a record of information. The value is arrived at
+    * by adding up the size Java allocates to each data type
+    */
+   public static int getSize() { return 585; }
+}
+</font> </pre> </b> <br> <br>
+</p>
+<p>The code provided violates some structured programming rules. I leave it to the reader to find and fix them.
+</p>
+<!-- Definitions -->
+<p><a name="RA"><b>random-access</b></a> - When you access an array, you use an index or subscript to access a particular element. Similarly, you can access a rand-access file.
+A random access file behaves like a large array of bytes stored in the file system.</p>
+<p><a name="DBMS"><b>DBMS</b></a> - DataBase Management System e.g. Oracle.</p>
+<p><a name="REQ"><b>requirement</b></a> - In this instance, a specification that documents the functions, performance, design constraints and attributes of a program to be delivered.</p>
+<p><a name="TEM"><b>Template</b> - is a unique class or pattern that can be used to build other software code.
+<p><a name="INH"><b>inheritance</b>  - when a class is defined, any subclass that is defined can inherit the definitions (public and/or protected) of the parent/base classes.</p>
+
+</font></p>
+<br> <br>
+          <br> </a></font></font><center><font size="4"><font size="4"><a name="INH"> 
+          <img src="indexHWS_files/bludiv4684.html" width="600" height="5">
+           </a></font></font><p><font size="4"><font size="4"><a name="INH"><font face="Verdana, Arial, Helvetica, sans-serif" size="1">[</font></a><font face="Verdana, Arial, Helvetica, sans-serif" size="1"><a href="http://sumtotalz.com/TotalAppsWorks/index.html">HOME</a>] 
+                 [<a href="http://sumtotalz.com/TotalAppsWorks/consulting.html">Consulting</a>] [<a href="http://sumtotalz.com/TotalAppsWorks/design.html">Design</a>]
+                 [<a href="http://sumtotalz.com/TotalAppsWorks/Maintenance.html">Maintenance</a>] [<a href="http://sumtotalz.com/TotalAppsWorks/project.html">Project</a>] 
+                 [<a href="http://sumtotalz.com/TotalAppsWorks/testing.html">Testing</a>] [<a href="http://sumtotalz.com/TotalAppsWorks/training.html">Training</a>] [<a href="http://sumtotalz.com/TotalAppsWorks/turnkey.html">Turnkey</a>] 
+                  [<a href="http://sumtotalz.com/TotalAppsWorks/java.html">Java</a>]</font></font></font></p>
+
+<font size="4"><font size="4">           </font></font><p><font size="4"><font size="4"><font color="black" size="2" face="Arial, Helvetica, sans-serif">© 2002 - 2005 All 
+                Rights Reserved<b><i> Total Application Works </i></b></font></font></font></p><font size="4"><font size="4"> </font></font></center><font size="4"><font size="4"> 
+</body></html>
